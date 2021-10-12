@@ -1,2 +1,2 @@
-# twitter-profile-rate-updater
-競プロ(AtCoderとか)のレート画像を定期的にクロールしてtwitterのプロフィール画像として反映してくれるアプリ
+# twitter-profile-banner-updater
+AtCoderとCodeforcesのレート推移画像を定期的にクロールしてtwitterプロフィールのバナー画像として更新してくれるアプリ
