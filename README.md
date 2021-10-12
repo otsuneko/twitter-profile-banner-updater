@@ -1,0 +1,2 @@
+# twitter-profile-rate-updater
+競プロ(AtCoderとか)のレート画像を定期的にクロールしてtwitterのプロフィール画像として反映してくれるアプリ
