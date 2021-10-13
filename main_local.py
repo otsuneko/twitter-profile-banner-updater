@@ -52,7 +52,7 @@ img_cf = img_cf.resize((700,400))
 img_cf.save('codeforces.png')
 
 # Twitterのプロフィールヘッダ用にAtCoderとCodeforcesのレート推移画像の連結及びリサイズ
-img_concat = concat_h(img_cf, img_ac, color="gray")
+img_concat = concat_h(img_cf, img_ac)
 img_concat = img_concat.resize((int(img_concat.width * 0.95), img_concat.height))
 img_concat.save('kyopro.png')
 
