@@ -24,32 +24,32 @@ cf_url = "https://codeforces.com/profile/" + user_name
 options = Options()
 options.add_argument('--headless')
 driver = webdriver.Chrome(options=options)
+
+# AtCoder
 driver.get(ac_url)
 driver.set_window_size(1920, 1080)
 time.sleep(1)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
-
 img_ac = Image.open(img_io)
 img_ac = img_ac.crop((700, 370, 1330, 815))
 img_ac = img_ac.resize((int(img_ac.width * 0.9), int(img_ac.height * 0.9)))
 
+# Codeforces
 driver.get(cf_url)
 driver.set_window_size(1920, 1080)
 time.sleep(1)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
-
 img_cf = Image.open(img_io)
 img_cf = img_cf.crop((370, 510, 1250, 855))
 img_cf = img_cf.resize((700,400))
 
-driver.quit()
-
 # Twitterのプロフィールヘッダ用にAtCoderとCodeforcesのレート推移画像の連結及びリサイズ
 img_concat = concat_h(img_cf, img_ac, color="gray")
 img_concat = img_concat.resize((int(img_concat.width * 0.95), img_concat.height))
-img_concat.save('tmp/kyopro.png')
+
+driver.quit()
 
 # Twitter APIを使ってプロフィールヘッダ画像をレート推移画像に変更
 API_KEY = os.environ['API_KEY']
@@ -61,4 +61,8 @@ auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
 auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 api = tweepy.API(auth)
-api.update_profile_banner('tmp/kyopro.png')
+
+# Herokuは一時ファイル保存できなかったのでバイナリデータで更新
+img_bytes = io.BytesIO()
+img_concat.save(img_bytes, 'png')
+api.update_profile_banner("kyopro.png", file=img_bytes.getvalue())
