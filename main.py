@@ -22,8 +22,8 @@ ac_url = "https://atcoder.jp/users/" + user_name
 cf_url = "https://codeforces.com/profile/" + user_name
 
 options = Options()
-options.add_argument('--headless')
-options.add_argument('--lang=ja')
+# options.add_argument('--headless')
+# options.add_argument('--lang=ja')
 driver = webdriver.Chrome(options=options)
 
 # AtCoder
