@@ -32,7 +32,7 @@ time.sleep(2)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_ac = Image.open(img_io)
-img_ac = img_ac.crop((700, 330, 1330, 775))
+img_ac = img_ac.crop((700, 320, 1330, 765))
 img_ac = img_ac.resize((int(img_ac.width * 0.9), int(img_ac.height * 0.9)))
 
 # Codeforces
