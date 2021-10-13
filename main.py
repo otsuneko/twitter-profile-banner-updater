@@ -23,7 +23,7 @@ cf_url = "https://codeforces.com/profile/" + user_name
 
 options = Options()
 options.add_argument('--headless')
-options.add_argument('--lang=ja-JP')
+options.add_argument('--lang=ja')
 driver = webdriver.Chrome(options=options)
 
 # AtCoder
