@@ -36,7 +36,9 @@ img_png = driver.get_screenshot_as_png()
 time.sleep(1)
 img_io = io.BytesIO(img_png)
 img_ac = Image.open(img_io)
-img_ac = img_ac.crop((700, 370, 1330, 815))
+x,y = 700,370
+width,height = 630,445
+img_ac = img_ac.crop((x, y, x+width, y+height))
 img_ac = img_ac.resize((int(img_ac.width * 0.9), int(img_ac.height * 0.9)))
 img_ac.save('atcoder.png')
 
@@ -47,7 +49,9 @@ img_png = driver.get_screenshot_as_png()
 time.sleep(1)
 img_io = io.BytesIO(img_png)
 img_cf = Image.open(img_io)
-img_cf = img_cf.crop((370, 510, 1250, 855))
+x,y = 370,580
+width,height = 880,345
+img_cf = img_cf.crop((x, y, x+width, y+height))
 img_cf = img_cf.resize((700,400))
 img_cf.save('codeforces.png')
 
