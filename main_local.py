@@ -45,8 +45,8 @@ img_ac.save('atcoder.png')
 # Codeforces
 driver.get(cf_url)
 driver.set_window_size(1920, 1080)
-img_png = driver.get_screenshot_as_png()
 time.sleep(1)
+img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_cf = Image.open(img_io)
 x,y = 370,580

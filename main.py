@@ -29,8 +29,8 @@ driver = webdriver.Chrome(options=options)
 # AtCoder
 driver.get(ac_url)
 driver.set_window_size(1920, 1080)
-img_png = driver.get_screenshot_as_png()
 time.sleep(10)
+img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_ac = Image.open(img_io)
 x,y = 700,310
@@ -41,8 +41,8 @@ img_ac = img_ac.resize((int(img_ac.width * 0.9), int(img_ac.height * 0.9)))
 # Codeforces
 driver.get(cf_url)
 driver.set_window_size(1920, 1080)
-img_png = driver.get_screenshot_as_png()
 time.sleep(10)
+img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_cf = Image.open(img_io)
 x,y = 370,580
