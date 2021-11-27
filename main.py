@@ -47,7 +47,7 @@ img_io = io.BytesIO(img_png)
 img_cf = Image.open(img_io)
 x,y = 370,580
 width,height = 880,345
-img_cf = img_cf.crop((370, 510, 1250, 855))
+img_cf = img_cf.crop((x, y, x+width, y+height))
 img_cf = img_cf.resize((700,400))
 
 # Twitterのプロフィールヘッダ用にAtCoderとCodeforcesのレート推移画像の連結及びリサイズ
