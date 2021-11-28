@@ -45,7 +45,7 @@ time.sleep(10)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_cf = Image.open(img_io)
-x,y = 370,580
+x,y = 370,510
 width,height = 880,345
 img_cf = img_cf.crop((x, y, x+width, y+height))
 img_cf = img_cf.resize((700,400))
