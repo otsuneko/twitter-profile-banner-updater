@@ -2,6 +2,7 @@ import os
 import io
 import time
 import tweepy
+import numpy as np
 from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -29,7 +30,7 @@ driver = webdriver.Chrome(options=options)
 # AtCoder
 driver.get(ac_url)
 driver.set_window_size(1920, 1080)
-time.sleep(10)
+time.sleep(15)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_ac = Image.open(img_io)
@@ -41,7 +42,7 @@ img_ac = img_ac.resize((int(img_ac.width * 0.9), int(img_ac.height * 0.9)))
 # Codeforces
 driver.get(cf_url)
 driver.set_window_size(1920, 1080)
-time.sleep(10)
+time.sleep(15)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_cf = Image.open(img_io)
@@ -49,10 +50,6 @@ x,y = 370,510
 width,height = 880,345
 img_cf = img_cf.crop((x, y, x+width, y+height))
 img_cf = img_cf.resize((700,400))
-
-# Twitterのプロフィールヘッダ用にAtCoderとCodeforcesのレート推移画像の連結及びリサイズ
-img_concat = concat_h(img_cf, img_ac)
-img_concat = img_concat.resize((int(img_concat.width * 0.95), img_concat.height))
 
 driver.quit()
 
@@ -67,7 +64,21 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 api = tweepy.API(auth)
 
-# Herokuは一時ファイル保存できなかったのでバイナリデータで更新
-img_bytes = io.BytesIO()
-img_concat.save(img_bytes, 'png')
-api.update_profile_banner("kyopro.png", file=img_bytes.getvalue())
+# 現在のプロフィールヘッダ画像を取得
+# user_id = os.environ['USER_ID']
+# screen_name = os.environ['SCREEN_NAME']
+# img_current = api.get_profile_banner(user_id, user_name)
+
+# 最新のレート推移画像キャプチャ成功時(白画像でない時)のみプロフィールヘッダ画像を更新
+img_ac_white = Image.new("RGB", (img_ac.width, img_ac.height), (255, 255, 255))
+img_cf_white = Image.new("RGB", (img_cf.width, img_cf.height), (255, 255, 255))
+
+if not np.array_equal(img_ac, img_ac_white) and not np.array_equal(img_cf, img_cf_white):
+    # Twitterのプロフィールヘッダ用にAtCoderとCodeforcesのレート推移画像の連結及びリサイズ
+    img_concat = concat_h(img_cf, img_ac)
+    img_concat = img_concat.resize((int(img_concat.width * 0.95), img_concat.height))
+
+    # Herokuは一時ファイル保存できなかったのでバイナリデータで更新
+    img_bytes = io.BytesIO()
+    img_concat.save(img_bytes, 'png')
+    api.update_profile_banner("kyopro.png", file=img_bytes.getvalue())
