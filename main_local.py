@@ -2,6 +2,7 @@ import os
 import io
 import time
 import tweepy
+import numpy as np
 import chromedriver_binary
 from PIL import Image
 from selenium import webdriver
@@ -55,11 +56,6 @@ img_cf = img_cf.crop((x, y, x+width, y+height))
 img_cf = img_cf.resize((700,400))
 img_cf.save('codeforces.png')
 
-# Twitterのプロフィールヘッダ用にAtCoderとCodeforcesのレート推移画像の連結及びリサイズ
-img_concat = concat_h(img_cf, img_ac)
-img_concat = img_concat.resize((int(img_concat.width * 0.95), img_concat.height))
-img_concat.save('kyopro.png')
-
 driver.quit()
 
 # Twitter APIを使ってプロフィールヘッダ画像をレート推移画像に変更
@@ -73,3 +69,22 @@ auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
 api = tweepy.API(auth)
 api.update_profile_banner('kyopro.png')
+
+# 現在のプロフィールヘッダ画像を取得
+# user_id = os.environ['USER_ID']
+# screen_name = os.environ['SCREEN_NAME']
+# img_current = api.get_profile_banner(user_id, user_name)
+
+# 最新のレート推移画像キャプチャ成功時(白画像でない時)のみプロフィールヘッダ画像を更新
+img_ac_white = np.array(Image.new("RGB", (img_ac.width, img_ac.height), (255, 255, 255)))
+img_cf_white = np.array(Image.new("RGB", (img_cf.width, img_cf.height), (255, 255, 255)))
+
+if not np.array_equal(np.array(img_ac), img_ac_white) and not np.array_equal(np.array(img_cf), img_cf_white):
+    # Twitterのプロフィールヘッダ用にAtCoderとCodeforcesのレート推移画像の連結及びリサイズ
+    img_concat = concat_h(img_cf, img_ac)
+    img_concat = img_concat.resize((int(img_concat.width * 0.95), img_concat.height))
+
+    # Herokuは一時ファイル保存できなかったのでバイナリデータで更新
+    img_bytes = io.BytesIO()
+    img_concat.save(img_bytes, 'png')
+    api.update_profile_banner("kyopro.png", file=img_bytes.getvalue())
