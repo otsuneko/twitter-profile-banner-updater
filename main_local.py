@@ -3,7 +3,7 @@ import io
 import time
 import tweepy
 import numpy as np
-import chromedriver_binary
+from webdriver_manager.chrome import ChromeDriverManager
 from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -28,7 +28,8 @@ cf_url = "https://codeforces.com/profile/" + user_name
 options = Options()
 options.binary_location = "C:\\Program Files\\Google\Chrome\\Application\\chrome.exe"
 options.add_argument('--headless')
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+driver.get('https://google.com')
 
 # AtCoder
 driver.get(ac_url)
@@ -37,7 +38,7 @@ img_png = driver.get_screenshot_as_png()
 time.sleep(1)
 img_io = io.BytesIO(img_png)
 img_ac = Image.open(img_io)
-x,y = 700,370
+x,y = 700,400
 width,height = 630,445
 img_ac = img_ac.crop((x, y, x+width, y+height))
 img_ac = img_ac.resize((int(img_ac.width * 0.9), int(img_ac.height * 0.9)))

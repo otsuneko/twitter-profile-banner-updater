@@ -4,6 +4,7 @@ import time
 import tweepy
 import numpy as np
 from PIL import Image
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
@@ -25,7 +26,8 @@ cf_url = "https://codeforces.com/profile/" + user_name
 options = Options()
 options.add_argument('--headless')
 options.add_argument('--lang=ja-JP')
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+driver.get('https://google.com')
 
 # AtCoder
 driver.get(ac_url)
@@ -34,7 +36,7 @@ time.sleep(15)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_ac = Image.open(img_io)
-x,y = 700,310
+x,y = 700,340
 width,height = 630,445
 img_ac = img_ac.crop((x, y, x+width, y+height))
 img_ac = img_ac.resize((int(img_ac.width * 0.9), int(img_ac.height * 0.9)))
