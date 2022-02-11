@@ -18,10 +18,10 @@ def concat_h(img1, img2, color="black"):
 
     return dst
 
-# AtCoderとCodeforcesのレート推移画像の取得及びリサイズ
+# AtCoder(AlgoとHeuristic)のレート推移画像の取得及びリサイズ
 user_name = os.environ['USER_NAME']
-ac_url = "https://atcoder.jp/users/" + user_name
-cf_url = "https://codeforces.com/profile/" + user_name
+ac_a_url = "https://atcoder.jp/users/" + user_name + "?contestType=algo"
+ac_h_url = "https://atcoder.jp/users/" + user_name + "?contestType=heuristic"
 
 options = Options()
 options.add_argument('--headless')
@@ -29,29 +29,27 @@ options.add_argument('--lang=ja-JP')
 driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
 driver.get('https://google.com')
 
-# AtCoder
-driver.get(ac_url)
+# AtCoder(Algo)
+driver.get(ac_a_url)
 driver.set_window_size(1920, 1080)
 time.sleep(15)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
-img_ac = Image.open(img_io)
-x,y = 700,340
-width,height = 630,445
-img_ac = img_ac.crop((x, y, x+width, y+height))
-img_ac = img_ac.resize((int(img_ac.width * 0.9), int(img_ac.height * 0.9)))
+img_ac_a = Image.open(img_io)
+x,y = 690,400
+width,height = 630,450
+img_ac_a = img_ac_a.crop((x, y, x+width, y+height))
 
-# Codeforces
-driver.get(cf_url)
+# AtCoder(Heuristic)
+driver.get(ac_h_url)
 driver.set_window_size(1920, 1080)
-time.sleep(15)
 img_png = driver.get_screenshot_as_png()
+time.sleep(15)
 img_io = io.BytesIO(img_png)
-img_cf = Image.open(img_io)
-x,y = 370,510
-width,height = 880,345
-img_cf = img_cf.crop((x, y, x+width, y+height))
-img_cf = img_cf.resize((700,400))
+img_ac_h = Image.open(img_io)
+x,y = 690,400
+width,height = 630,450
+img_ac_h = img_ac_h.crop((x, y, x+width, y+height))
 
 driver.quit()
 
@@ -72,13 +70,13 @@ api = tweepy.API(auth)
 # img_current = api.get_profile_banner(user_id, user_name)
 
 # 最新のレート推移画像キャプチャ成功時(白画像でない時)のみプロフィールヘッダ画像を更新
-img_ac_white = np.array(Image.new("RGB", (img_ac.width, img_ac.height), (255, 255, 255)))
-img_cf_white = np.array(Image.new("RGB", (img_cf.width, img_cf.height), (255, 255, 255)))
+img_ac_a_white = np.array(Image.new("RGB", (img_ac_a.width, img_ac_a.height), (255, 255, 255)))
+img_ac_h_white = np.array(Image.new("RGB", (img_ac_h.width, img_ac_h.height), (255, 255, 255)))
 
-if not np.array_equal(np.array(img_ac), img_ac_white) and not np.array_equal(np.array(img_cf), img_cf_white):
-    # Twitterのプロフィールヘッダ用にAtCoderとCodeforcesのレート推移画像の連結及びリサイズ
-    img_concat = concat_h(img_cf, img_ac)
-    img_concat = img_concat.resize((int(img_concat.width * 0.95), img_concat.height))
+if not np.array_equal(np.array(img_ac_a), img_ac_a_white) and not np.array_equal(np.array(img_ac_h), img_ac_h_white):
+    # Twitterのプロフィールヘッダ用にAtCoder(AlgoとHeuristic)のレート推移画像の連結及びリサイズ
+    img_concat = concat_h(img_ac_a, img_ac_h)
+    img_concat = img_concat.resize((1500, 500))
 
     # Herokuは一時ファイル保存できなかったのでバイナリデータで更新
     img_bytes = io.BytesIO()
