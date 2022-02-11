@@ -36,7 +36,7 @@ time.sleep(15)
 img_png = driver.get_screenshot_as_png()
 img_io = io.BytesIO(img_png)
 img_ac_a = Image.open(img_io)
-x,y = 690,400
+x,y = 690,350
 width,height = 630,450
 img_ac_a = img_ac_a.crop((x, y, x+width, y+height))
 
@@ -47,7 +47,7 @@ img_png = driver.get_screenshot_as_png()
 time.sleep(15)
 img_io = io.BytesIO(img_png)
 img_ac_h = Image.open(img_io)
-x,y = 690,400
+x,y = 690,350
 width,height = 630,450
 img_ac_h = img_ac_h.crop((x, y, x+width, y+height))
 
