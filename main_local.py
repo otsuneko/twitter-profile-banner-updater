@@ -3,10 +3,9 @@ import io
 import time
 import tweepy
 import numpy as np
-from webdriver_manager.chrome import ChromeDriverManager
 from PIL import Image
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -25,10 +24,11 @@ user_name = os.environ['USER_NAME']
 ac_a_url = "https://atcoder.jp/users/" + user_name + "?contestType=algo"
 ac_h_url = "https://atcoder.jp/users/" + user_name + "?contestType=heuristic"
 
-options = Options()
-options.binary_location = "C:\\Program Files\\Google\Chrome\\Application\\chrome.exe"
+options = webdriver.ChromeOptions()
 options.add_argument('--headless')
-driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+chromedriver = "/home/otsuneko/.local/lib/python3.8/site-packages/chromedriver_binary/"
+service = Service(executable_path=chromedriver)
+driver = webdriver.Chrome(service=service, options=options)
 driver.get('https://google.com')
 
 # AtCoder(Algo)
@@ -38,7 +38,7 @@ img_png = driver.get_screenshot_as_png()
 time.sleep(1)
 img_io = io.BytesIO(img_png)
 img_ac_a = Image.open(img_io)
-x,y = 690,400
+x,y = 690,330
 width,height = 630,450
 img_ac_a = img_ac_a.crop((x, y, x+width, y+height))
 img_ac_a.save('atcoder_a.png')
@@ -50,7 +50,7 @@ img_png = driver.get_screenshot_as_png()
 time.sleep(1)
 img_io = io.BytesIO(img_png)
 img_ac_h = Image.open(img_io)
-x,y = 690,400
+x,y = 690,330
 width,height = 630,450
 img_ac_h = img_ac_h.crop((x, y, x+width, y+height))
 img_ac_h.save('atcoder_h.png')
@@ -58,16 +58,16 @@ img_ac_h.save('atcoder_h.png')
 driver.quit()
 
 # Twitter APIを使ってプロフィールヘッダ画像をレート推移画像に変更
-API_KEY = os.environ['API_KEY']
-API_SECRET = os.environ['API_SECRET']
-ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
-ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
+# API_KEY = os.environ['API_KEY']
+# API_SECRET = os.environ['API_SECRET']
+# ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
+# ACCESS_TOKEN_SECRET = os.environ['ACCESS_TOKEN_SECRET']
 
-auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
-auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+# auth = tweepy.OAuthHandler(API_KEY, API_SECRET)
+# auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
 
-api = tweepy.API(auth)
-api.update_profile_banner('kyopro.png')
+# api = tweepy.API(auth)
+# api.update_profile_banner('kyopro.png')
 
 # 現在のプロフィールヘッダ画像を取得
 # user_id = os.environ['USER_ID']
@@ -82,8 +82,5 @@ if not np.array_equal(np.array(img_ac_a), img_ac_a_white) and not np.array_equal
     # Twitterのプロフィールヘッダ用にAtCoder(AlgoとHeuristic)のレート推移画像の連結及びリサイズ
     img_concat = concat_h(img_ac_a, img_ac_h)
     img_concat = img_concat.resize((1500, 500))
-
-    # Herokuは一時ファイル保存できなかったのでバイナリデータで更新
-    img_bytes = io.BytesIO()
-    img_concat.save(img_bytes, 'png')
-    api.update_profile_banner("kyopro.png", file=img_bytes.getvalue())
+    img_concat.save('kyopro.png')
+    # api.update_profile_banner("kyopro.png", file=img_bytes.getvalue())
