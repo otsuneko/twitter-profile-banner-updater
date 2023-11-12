@@ -1,2 +1,2 @@
 # twitter-profile-banner-updater
-AtCoderとCodeforcesのレート推移画像を定期的にクロールしてtwitterプロフィールのバナー画像として更新してくれるアプリ
+AtCoderのAlgorithmとHeuristicレート推移画像を定期的にクロールしてtwitterプロフィールのバナー画像として更新してくれるアプリ
