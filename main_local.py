@@ -1,10 +1,11 @@
 import os
 import io
 import time
-import tweepy
+# import tweepy
 import numpy as np
 from PIL import Image
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
 from dotenv import load_dotenv
 load_dotenv()
@@ -26,10 +27,10 @@ ac_h_url = "https://atcoder.jp/users/" + user_name + "?contestType=heuristic"
 
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
-chromedriver = "/home/otsuneko/.local/lib/python3.8/site-packages/chromedriver_binary/"
-service = Service(executable_path=chromedriver)
-driver = webdriver.Chrome(service=service, options=options)
-driver.get('https://google.com')
+# chromedriver = "/home/otsuneko/.pyenv/versions/pypy3.10-7.3.12/lib/pypy3.10/site-packages/selenium/webdriver/chrome"
+# service = Service(executable_path=chromedriver)
+# driver = webdriver.Chrome(service=service, options=options)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
 # AtCoder(Algo)
 driver.get(ac_a_url)
